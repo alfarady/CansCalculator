@@ -11,6 +11,8 @@ export class AppController {
 
   @Post('/promo/cans')
   calculateCans(@Body() params: CalculateCansRequest) {
-    return this.appService.calculateCans(params.initialCans);
+    return {
+      totalCansReceived: this.appService.calculateTotalCans(params.initialCans),
+    };
   }
 }

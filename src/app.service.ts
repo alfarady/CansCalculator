@@ -4,24 +4,16 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   private freeCansThreshold = 3;
 
-  calculateCans(initialCans: number) {
-    if (initialCans < this.freeCansThreshold) {
-      throw new Error('Not enough cans to calculate');
-    }
-
-    return this.calcCans(initialCans, 0);
-  }
-
-  private calcCans(initialCans: number, lastCans: number, result = 0) {
-    if (initialCans < this.freeCansThreshold) {
-      return result;
-    }
-
+  calculateTotalCans(initialCans: number): number {
     let totalCans = initialCans;
-    let freeCans = Math.floor(totalCans / this.freeCansThreshold);
-    totalCans += freeCans;
-    result = freeCans + lastCans;
+    let emptyCans = initialCans;
 
-    return this.calcCans(freeCans, totalCans, result);
+    while (emptyCans >= this.freeCansThreshold) {
+      const newCans = Math.floor(emptyCans / this.freeCansThreshold);
+      totalCans += newCans;
+      emptyCans = (emptyCans % this.freeCansThreshold) + newCans;
+    }
+
+    return totalCans;
   }
 }
